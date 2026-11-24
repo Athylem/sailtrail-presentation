@@ -19,6 +19,7 @@ BLOBS = {
     'e7a335a6233392955f10a7d6f9e2db13': 'assets/nomade.jpg',
     'bc4260e57eff296de207694f5f6bcd1a': 'assets/sailor.jpg',
     '774c939cbd9d971c518f2a1dd982344e': 'assets/site_nomade.png',
+    '9906218e5c19921c0dee5a4943bd6acb': 'assets/jordan.jpg',
 }
 
 PLAYER_CSS = r"""
