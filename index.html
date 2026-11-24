@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sail Trail — Supply chain Odoo</title>
+<link rel="icon" href="assets/logo_navy.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=DM+Sans:wght@400;600;700&display=swap">
+<style>
+/* Sail Trail — thème jaune et bleu marine, animations motion design */
+:root {
+  --navy: #0E1B33;
+  --navy-2: #1C3358;
+  --cream: #FFFCF3;
+  --sand: #FFF2C6;
+  --yellow: #F6C21B;
+  --yellow-dk: #7A5800;
+  --yellow-lt: #FFD84D;
+  --blue: #2F5D8C;
+  --ink: #24324A;
+  --mist: #C9D4E6;
+  --line: #E8DCAE;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+body { font-family: 'DM Sans', Arial, sans-serif; color: var(--ink); }
+
+section {
+  --base: 150ms;
+  counter-increment: page;
+  box-sizing: border-box;
+  padding: 128px 128px 160px;
+  background: var(--cream);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+section.sand { background: var(--sand); }
+section.dark { background: var(--navy); color: var(--mist); }
+section.accent { background: var(--yellow); color: var(--navy); }
+
+section::after {
+  content: counter(page);
+  position: absolute;
+  bottom: 64px;
+  right: 128px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--navy);
+}
+section.dark::after { color: var(--yellow); }
+section.cover::after { content: none; }
+
+/* Logo en bas à gauche des diapos de contenu */
+.corner-logo { position: absolute; left: 128px; bottom: 44px; width: 77px; height: 64px; object-fit: contain; animation: fade 900ms var(--ease) both; animation-delay: 600ms; }
+
+h1, h2, h3 { font-family: 'Outfit', Arial, sans-serif; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
+section.dark h1, section.dark h2, section.dark h3 { color: var(--cream); }
+h1 { font-size: 150px; line-height: 1.05; letter-spacing: -3px; }
+h2 { font-size: 64px; line-height: 1.08; }
+h3 { font-size: 40px; line-height: 1.15; font-weight: 700; }
+p { font-size: 30px; line-height: 1.4; }
+
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--yellow-dk); }
+section.dark .eyebrow { color: var(--yellow); }
+section.accent .eyebrow { color: var(--navy); }
+
+/* En-tête commun : sur-titre, titre, trait jaune ; intervenant à droite */
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; margin-bottom: 48px; }
+.head .titles { display: flex; flex-direction: column; gap: 12px; }
+.head .eyebrow { animation: from-left 800ms var(--ease) both; animation-delay: var(--base); }
+.head h2 { animation: rise 900ms var(--ease) both; animation-delay: calc(var(--base) + 100ms); }
+.rule { width: 120px; height: 10px; border-radius: 5px; background: var(--yellow); animation: grow 800ms var(--ease) both; animation-delay: calc(var(--base) + 350ms); }
+section.accent .rule { background: var(--navy); }
+.speaker { font-size: 24px; font-weight: 700; background: var(--navy); color: var(--yellow); padding: 8px 24px; border-radius: 40px; white-space: nowrap; animation: pop 700ms var(--ease) both; animation-delay: calc(var(--base) + 250ms); }
+section.dark .speaker { background: var(--yellow); color: var(--navy); }
+
+.spacer { flex: 1; }
+.small { font-size: 24px; line-height: 1.4; }
+.muted { color: #56627A; }
+.strong { font-weight: 700; color: var(--navy); }
+
+/* Cartes */
+.card { background: #FFFEFA; border: 2px solid var(--line); border-radius: 20px; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px rgba(14, 27, 51, .07); }
+section.sand .card { background: var(--cream); }
+.card .num { font-family: 'Outfit', Arial, sans-serif; font-weight: 800; font-size: 48px; line-height: 1; width: 84px; height: 84px; box-sizing: border-box; border-radius: 42px; display: flex; align-items: center; justify-content: center; background: var(--yellow); color: var(--navy); }
+.card .txt { font-size: 24px; line-height: 1.4; color: var(--ink); }
+.pill { font-size: 24px; font-weight: 600; padding: 6px 18px; border-radius: 30px; background: var(--navy); color: var(--cream); white-space: nowrap; }
+.pill.light { background: var(--sand); color: var(--navy); }
+.pill.yellow { background: var(--yellow); color: var(--navy); }
+.pill.outline { background: transparent; color: var(--navy); border: 2px dashed var(--navy); }
+
+/* Bandeau de conclusion en bas de diapo */
+.band { background: var(--navy); color: var(--cream); border-radius: 16px; padding: 24px 32px; font-size: 30px; line-height: 1.35; border-left: 14px solid var(--yellow); }
+.band b { color: var(--yellow); }
+
+table { font-size: 26px; color: var(--ink); width: 100%; }
+
+/* Motion design : vocabulaire d'animations (opacité, transform, flou) */
+@keyframes rise { from { opacity: 0; transform: translateY(44px); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes slide { from { opacity: 0; transform: translateX(-60px); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes from-left { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes grow { from { opacity: 0; transform: translateX(-60px) scaleX(0); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes zoom { from { opacity: 0; transform: rotate(-25deg) scale(.2); } to { opacity: 1; transform: none; } }
+@keyframes drop { from { opacity: 0; transform: translateY(-160px) rotate(-10deg); } to { opacity: 1; transform: none; } }
+@keyframes bob { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-14px) rotate(-2deg); } }
+@keyframes stripe { from { opacity: 0; transform: translateX(600px) rotate(-32deg); } to { opacity: 1; transform: rotate(-32deg); } }
+@keyframes bar { from { opacity: 0; transform: translateX(-620px) scaleX(0); } to { opacity: 1; transform: none; } }
+@property --n { syntax: '<integer>'; inherits: false; initial-value: 0 }
+@keyframes count { from { --n: 0 } }
+
+.rise { animation: rise 900ms var(--ease) both; animation-delay: calc(var(--base) + var(--i, 0) * 120ms); }
+.slide-in { animation: slide 900ms var(--ease) both; animation-delay: calc(var(--base) + var(--i, 0) * 160ms); }
+
+/* Marges qui comptent jusqu'à leur valeur */
+.marge { display: flex; gap: 12px; align-items: baseline; }
+.n { animation: count 1.6s ease-out both; animation-delay: 700ms; }
+
+/* Apparition au clic de l'orateur */
+.fragment { opacity: 0; transform: translateY(34px) scale(.96); filter: blur(8px); transition: opacity 600ms var(--ease), transform 700ms var(--ease), filter 600ms var(--ease); }
+.fragment.visible { opacity: 1; transform: none; filter: blur(0); }
+
+/* Couverture et fin */
+.cover-text { width: 980px; display: flex; flex-direction: column; gap: 32px; flex: 1; }
+.cover .lead { font-size: 40px; line-height: 1.25; color: var(--mist); }
+.cover .team { font-size: 30px; font-weight: 700; color: var(--yellow); }
+.cover h1.big { font-size: 150px; }
+.sun-wrap { position: absolute; left: 1168px; top: 160px; width: 620px; height: 620px; animation: zoom 1100ms var(--ease) both; animation-delay: 100ms; }
+.sun { width: 620px; height: 620px; }
+.logo-big { position: absolute; left: 1228px; top: 262px; width: 500px; height: 416px; object-fit: contain; animation: drop 1200ms var(--ease) both, bob 3s ease-in-out 1500ms infinite alternate; animation-delay: 500ms, 1700ms; }
+.stripe { position: absolute; height: 16px; border-radius: 8px; background: var(--yellow); transform: rotate(-32deg); animation: stripe 1000ms var(--ease) both; }
+.stripe.s1 { left: 1420px; top: 40px; width: 460px; animation-delay: 250ms; }
+.stripe.s2 { left: 1560px; top: 60px; width: 320px; animation-delay: 360ms; }
+.stripe.s3 { left: 1680px; top: 80px; width: 200px; animation-delay: 470ms; }
+.waves { position: absolute; left: 0; top: 900px; width: 1920px; height: 180px; animation: fade 1500ms ease both; animation-delay: 800ms; }
+
+/* Flux logistique */
+.flow { display: flex; align-items: stretch; gap: 8px; }
+.flow .step { display: flex; align-items: stretch; gap: 8px; }
+.flow .node { width: 336px; box-sizing: border-box; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 10px; background: #FFFEFA; border: 2px solid var(--line); box-shadow: 0 10px 30px rgba(14, 27, 51, .07); }
+.flow .node.us { background: var(--navy); border-color: var(--navy); }
+.flow .node.us h3 { color: var(--cream); }
+.flow .node.us .txt { color: var(--mist); }
+.flow .node .tag { font-size: 24px; font-weight: 700; color: var(--yellow-dk); }
+.flow .node.us .tag { color: var(--yellow); }
+.flow .node .txt { font-size: 24px; line-height: 1.35; color: var(--ink); }
+.flow .arrow { width: 88px; display: flex; align-items: center; justify-content: center; }
+.flow x-shape { width: 72px; height: 36px; background: var(--yellow); }
+.flow .step.fragment { transform: translateX(-60px); }
+.flow .step.fragment.visible { transform: none; }
+
+/* Barres de coûts : chaque barre se déploie depuis la gauche */
+.bars { display: flex; flex-direction: column; gap: 56px; }
+.bar-row { display: flex; flex-direction: column; gap: 14px; }
+.bar-label { display: flex; justify-content: space-between; align-items: baseline; width: 1240px; }
+.bar { display: flex; height: 72px; border-radius: 12px; overflow: hidden; animation: bar 1300ms var(--ease) both; animation-delay: calc(var(--base) + 300ms + var(--i, 0) * 160ms); }
+.seg { flex: none; height: 72px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--cream); }
+.seg.mat { background: var(--blue); }
+.seg.cou { background: var(--navy-2); }
+.seg.box { background: #A08C55; }
+.seg.fin { background: #5C6B78; }
+.seg.mar { background: var(--yellow); color: var(--navy); }
+.legend { display: flex; gap: 36px; flex-wrap: wrap; }
+.legend .item { display: flex; align-items: center; gap: 12px; font-size: 24px; }
+.legend .dot { width: 24px; height: 24px; border-radius: 6px; }
+
+
+html, body { margin: 0; height: 100%; background: #08111F; overflow: hidden; }
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; background: #0E1B33; }
+#stage > section { position: absolute; inset: 0; width: 1920px; height: 1080px; display: none; overflow: hidden; }
+#stage > section.active { display: flex; }
+#stage > section.enter { animation: deck-push 700ms cubic-bezier(.16, 1, .3, 1) both; }
+#stage > section.enter-back { animation: deck-push-back 700ms cubic-bezier(.16, 1, .3, 1) both; }
+@keyframes deck-push { from { transform: translateX(14%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes deck-push-back { from { transform: translateX(-14%); opacity: 0; } to { transform: none; opacity: 1; } }
+section::after { content: attr(data-n) !important; }
+section.cover::after { content: none !important; }
+aside { display: none; }
+p, h1, h2, h3 { margin: 0; }
+th, td { text-align: left; padding: 10px 12px; vertical-align: top; }
+th { color: var(--navy); border-bottom: 3px solid var(--yellow); }
+td { border-bottom: 1px solid var(--line); }
+x-shape { display: inline-block; }
+x-shape[kind="arrow-right"] { clip-path: polygon(0 32%, 62% 32%, 62% 0, 100% 50%, 62% 100%, 62% 68%, 0 68%); }
+#notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 40vh; overflow: auto; background: rgba(8, 17, 31, .94); color: #FFFCF3; font: 18px/1.5 'DM Sans', Arial, sans-serif; padding: 18px 28px; display: none; z-index: 10; }
+#notes.on { display: block; }
+#hint { position: fixed; right: 16px; bottom: 12px; font: 13px/1.4 'DM Sans', Arial, sans-serif; color: #7F8FAA; z-index: 9; transition: opacity .6s; }
+#prog { position: fixed; left: 0; bottom: 0; height: 4px; background: #F6C21B; z-index: 9; transition: width .4s; }
+@media (prefers-reduced-motion: reduce) { #stage > section.enter, #stage > section.enter-back { animation: none; } }
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section data-n="1" id="cover" class="dark cover" data-transition="push">
+<div class="sun-wrap"><svg class="sun" width="620" height="620" viewBox="0 0 620 620" xmlns="http://www.w3.org/2000/svg"><circle cx="310" cy="310" r="310" fill="#F6C21B"/></svg></div>
+<div class="stripe s1"></div>
+<div class="stripe s2"></div>
+<div class="stripe s3"></div>
+<img class="logo-big" src="assets/logo_navy.svg" alt="Logo Sail Trail : une voile au-dessus des vagues">
+<svg class="waves" width="1920" height="180" viewBox="0 0 1920 180" xmlns="http://www.w3.org/2000/svg">
+<g><path d="M0 70 Q120 30 240 70 T480 70 T720 70 T960 70 T1200 70 T1440 70 T1680 70 T1920 70 T2160 70 T2400 70" fill="none" stroke="#F6C21B" stroke-width="6" stroke-linecap="round"/><animateTransform attributeName="transform" type="translate" from="0 0" to="-480 0" dur="9s" repeatCount="indefinite"/></g>
+<g><path d="M-480 120 Q-360 80 -240 120 T0 120 T240 120 T480 120 T720 120 T960 120 T1200 120 T1440 120 T1680 120 T1920 120" fill="none" stroke="#C9D4E6" stroke-width="4" stroke-linecap="round" opacity="0.45"/><animateTransform attributeName="transform" type="translate" from="0 0" to="480 0" dur="14s" repeatCount="indefinite"/></g>
+</svg>
+<div class="cover-text">
+<p class="eyebrow rise" style="--i:0">Projet Supply Chain · Odoo 2026 · FIGIM 2A</p>
+<h1 class="rise big" style="--i:1">Sail Trail</h1>
+<p class="lead rise" style="--i:3">Des voiles de bateau en fin de vie aux sacs et casquettes : notre chaîne logistique verte, pilotée dans Odoo</p>
+<div class="spacer"></div>
+<p class="team rise" style="--i:5">Oscar · Youenn · Malouan · Loric · Pierre-Ferric</p>
+</div>
+<aside>Pierre-Ferric (30 s, 0:00–0:30). Répartition : Oscar 0:30–2:30, Youenn 2:30–4:30, Malouan 4:30–6:30, Loric 6:30–8:30, Pierre-Ferric 8:30–10:00. Bonjour, nous sommes Sail Trail. Nous fabriquons des sacs et des casquettes à partir de voiles de bateau usagées, et nous avons construit toute notre chaîne logistique dans Odoo : achats, sous-traitance, fabrication, vente et comptabilité.</aside>
+</section>
+<section data-n="2" id="produits" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">L’entreprise</p>
+<h2>Des voiles usées, deux produits</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Oscar</p>
+</div>
+<div style="display:flex; gap:48px; flex:1;">
+<div class="card rise" style="--i:1; flex:1; flex-direction:row; gap:36px; border-top:12px solid var(--yellow);">
+<div style="width:300px; flex:none; background:#FFFFFF; border-radius:16px; display:flex; align-items:center; justify-content:center; overflow:hidden;"><img src="assets/nomade.jpg" alt="Sac à dos Le Nomade en voile recyclée crème et orange, logo Sail Trail" style="width:300px; height:450px; object-fit:contain; animation: pop 900ms var(--ease) both; animation-delay:450ms;"></div>
+<div style="flex:1; display:flex; flex-direction:column; gap:20px;">
+<p class="eyebrow">Sac</p>
+<h3 style="font-size:64px;">Le Nomade</h3>
+<p class="txt" style="font-size:28px;">Voile Dacron recyclée, toile de lin, zip recyclé.</p>
+<div class="spacer"></div>
+<div><p class="small muted">Prix HT</p><p style="font-size:48px; font-weight:700; color:var(--navy);">155 €</p></div>
+<div><p class="small muted">Coût</p><p style="font-size:40px; font-weight:700; color:var(--navy);">60,50 €</p></div>
+</div>
+</div>
+<div class="card rise" style="--i:2; flex:1; flex-direction:row; gap:36px; border-top:12px solid var(--blue);">
+<div style="width:300px; flex:none; background:#FFFFFF; border-radius:16px; display:flex; align-items:center; justify-content:center; overflow:hidden;"><img src="assets/sailor.jpg" alt="Casquette Sailor en voile recyclée beige et grise, logo Sail Trail" style="width:300px; height:450px; object-fit:contain; animation: pop 900ms var(--ease) both; animation-delay:600ms;"></div>
+<div style="flex:1; display:flex; flex-direction:column; gap:20px;">
+<p class="eyebrow">Casquette</p>
+<h3 style="font-size:64px;">Sailor</h3>
+<p class="txt" style="font-size:28px;">Voile recyclée, visière et bouton.</p>
+<div class="spacer"></div>
+<div><p class="small muted">Prix HT</p><p style="font-size:48px; font-weight:700; color:var(--navy);">41,67 €</p></div>
+<div><p class="small muted">Coût</p><p style="font-size:40px; font-weight:700; color:var(--navy);">28,50 €</p></div>
+</div>
+</div>
+</div>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Oscar (1 min, 0:30–1:30). Sail Trail transforme des voiles de bateau en fin de vie en accessoires. Deux produits : le sac Le Nomade, notre produit phare, et la casquette Sailor, notre produit d’appel. Nous ne cousons pas nous-mêmes : un atelier sous-traitant assemble, nous faisons la finition.</aside>
+</section>
+<section data-n="3" id="vert" class="sand" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">Une supply chain verte</p>
+<h2>Trois choix pour limiter notre impact</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Oscar</p>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:40px; flex:1;">
+<div class="card rise" style="--i:1; gap:20px;"><p class="num">1</p><h3>Matière récupérée</h3><p class="txt" style="font-size:30px;">Voiles collectées sur d’anciens bateaux par deux fournisseurs, Atlantic Sail Recovery et BreizhVoile : de la logistique inverse en amont.</p></div>
+<div class="card rise" style="--i:2; gap:20px;"><p class="num">2</p><h3>Livraison directe</h3><p class="txt" style="font-size:30px;">Les matières vont droit à l’atelier, sans détour par notre entrepôt.</p></div>
+<div class="card rise" style="--i:3; gap:20px;"><p class="num">3</p><h3>Local et éco-conçu</h3><p class="txt" style="font-size:30px;">Fournisseurs en France, boîte d’expédition éco-conçue.</p></div>
+</div>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Oscar (1 min, 1:30–2:30). Notre chaîne est verte dès l’approvisionnement : la matière première vient de voiles récupérées sur d’anciens bateaux par deux fournisseurs, Atlantic Sail Recovery et BreizhVoile, c’est de la logistique inverse. Les matières sont livrées directement à l’atelier, donc moins de transport. Et nos fournisseurs sont en France. Transition vers Youenn.</aside>
+</section>
+<section data-n="4" id="flux" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">La chaîne logistique</p>
+<h2>De la voile au client, en quatre étapes</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Youenn</p>
+</div>
+<div style="display:flex; gap:24px; align-items:stretch;">
+<div class="card rise" style="--i:1; width:1000px; flex:none; gap:12px; padding:24px 32px; border-top:12px solid var(--yellow);">
+<div style="display:flex; align-items:baseline; gap:18px;"><p class="eyebrow">1 · Achats</p><h3 style="font-size:36px;">7 fournisseurs, commandés en parallèle</h3></div>
+<div style="display:flex; gap:36px; align-items:center;">
+<div style="flex:none; animation: zoom 1100ms var(--ease) both; animation-delay:400ms;"><svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><circle cx="150" cy="150" r="110" fill="none" stroke="#0E1B33" stroke-width="56" stroke-dasharray="173.81 517.34" stroke-dashoffset="0.00" transform="rotate(-90 150 150)"/><circle cx="150" cy="150" r="110" fill="none" stroke="#2F5D8C" stroke-width="56" stroke-dasharray="173.81 517.34" stroke-dashoffset="-176.81" transform="rotate(-90 150 150)"/><circle cx="150" cy="150" r="110" fill="none" stroke="#F6C21B" stroke-width="56" stroke-dasharray="77.37 613.78" stroke-dashoffset="-353.61" transform="rotate(-90 150 150)"/><circle cx="150" cy="150" r="110" fill="none" stroke="#A08C55" stroke-width="56" stroke-dasharray="77.37 613.78" stroke-dashoffset="-433.98" transform="rotate(-90 150 150)"/><circle cx="150" cy="150" r="110" fill="none" stroke="#5C6B78" stroke-width="56" stroke-dasharray="69.33 621.82" stroke-dashoffset="-514.34" transform="rotate(-90 150 150)"/><circle cx="150" cy="150" r="110" fill="none" stroke="#C99A00" stroke-width="56" stroke-dasharray="61.29 629.86" stroke-dashoffset="-586.67" transform="rotate(-90 150 150)"/><circle cx="150" cy="150" r="110" fill="none" stroke="#8FA3C4" stroke-width="56" stroke-dasharray="37.18 653.97" stroke-dashoffset="-650.97" transform="rotate(-90 150 150)"/><text x="150" y="140" text-anchor="middle" font-family="Outfit, Arial, sans-serif" font-weight="800" font-size="52" fill="#0E1B33">43 €</text><text x="150" y="170" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-size="17" fill="#56627A">1 sac</text><text x="150" y="192" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-size="17" fill="#56627A">+ 1 casquette</text></svg></div>
+<div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:4px;"><div class="rise" style="--i:2; display:flex; align-items:center; gap:14px;"><div style="width:22px; height:22px; flex:none; border-radius:6px; background:#0E1B33;"></div><div style="flex:1; min-width:0;"><p style="font-size:24px; line-height:1.15; font-weight:700; color:var(--navy);">Les Tissages de la Côte d’Albâtre</p><p style="font-size:19px; line-height:1.2; color:#56627A;">Toile de lin 8,50 € · sangles 2,50 €</p></div><p style="font-size:26px; font-weight:700; color:var(--navy); white-space:nowrap;">11 €</p></div><div class="rise" style="--i:3; display:flex; align-items:center; gap:14px;"><div style="width:22px; height:22px; flex:none; border-radius:6px; background:#2F5D8C;"></div><div style="flex:1; min-width:0;"><p style="font-size:24px; line-height:1.15; font-weight:700; color:var(--navy);">Hardware Durable</p><p style="font-size:19px; line-height:1.2; color:#56627A;">Boucles 5 € · visière 5 € · bouton 1 €</p></div><p style="font-size:26px; font-weight:700; color:var(--navy); white-space:nowrap;">11 €</p></div><div class="rise" style="--i:4; display:flex; align-items:center; gap:14px;"><div style="width:22px; height:22px; flex:none; border-radius:6px; background:#F6C21B;"></div><div style="flex:1; min-width:0;"><p style="font-size:24px; line-height:1.15; font-weight:700; color:var(--navy);">Atlantic Sail Recovery</p><p style="font-size:19px; line-height:1.2; color:#56627A;">Voile de casquette</p></div><p style="font-size:26px; font-weight:700; color:var(--navy); white-space:nowrap;">5 €</p></div><div class="rise" style="--i:5; display:flex; align-items:center; gap:14px;"><div style="width:22px; height:22px; flex:none; border-radius:6px; background:#A08C55;"></div><div style="flex:1; min-width:0;"><p style="font-size:24px; line-height:1.15; font-weight:700; color:var(--navy);">Cartonnages Verts</p><p style="font-size:19px; line-height:1.2; color:#56627A;">Boîte éco-conçue ×2</p></div><p style="font-size:26px; font-weight:700; color:var(--navy); white-space:nowrap;">5 €</p></div><div class="rise" style="--i:6; display:flex; align-items:center; gap:14px;"><div style="width:22px; height:22px; flex:none; border-radius:6px; background:#5C6B78;"></div><div style="flex:1; min-width:0;"><p style="font-size:24px; line-height:1.15; font-weight:700; color:var(--navy);">Éco-Feutre du Midi</p><p style="font-size:19px; line-height:1.2; color:#56627A;">Rembourrage feutre</p></div><p style="font-size:26px; font-weight:700; color:var(--navy); white-space:nowrap;">4,50 €</p></div><div class="rise" style="--i:7; display:flex; align-items:center; gap:14px;"><div style="width:22px; height:22px; flex:none; border-radius:6px; background:#C99A00;"></div><div style="flex:1; min-width:0;"><p style="font-size:24px; line-height:1.15; font-weight:700; color:var(--navy);">BreizhVoile</p><p style="font-size:19px; line-height:1.2; color:#56627A;">Voile Dacron du sac</p></div><p style="font-size:26px; font-weight:700; color:var(--navy); white-space:nowrap;">4 €</p></div><div class="rise" style="--i:8; display:flex; align-items:center; gap:14px;"><div style="width:22px; height:22px; flex:none; border-radius:6px; background:#8FA3C4;"></div><div style="flex:1; min-width:0;"><p style="font-size:24px; line-height:1.15; font-weight:700; color:var(--navy);">EcoZip France</p><p style="font-size:19px; line-height:1.2; color:#56627A;">Fermeture éclair</p></div><p style="font-size:26px; font-weight:700; color:var(--navy); white-space:nowrap;">2,50 €</p></div></div>
+</div>
+</div>
+<div style="width:64px; flex:none; display:flex; align-items:center; justify-content:center;"><x-shape kind="arrow-right" style="width:56px; height:32px; background:var(--yellow);"></x-shape></div>
+<div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:16px; justify-content:space-between;">
+<div class="card fragment" data-fragment-index="1" style="padding:22px 26px; gap:6px; flex-direction:row; align-items:center; "><div style="flex:1; display:flex; flex-direction:column; gap:6px;"><p class="eyebrow" style="font-size:20px;">2 · Sous-traitance</p><h3 style="font-size:34px;">Atelier Couture Voile</h3><p class="txt" style="font-size:22px;">Reçoit les matières et coud le produit brut.</p></div></div>
+<div class="card fragment" data-fragment-index="2" style="padding:22px 26px; gap:6px; flex-direction:row; align-items:center; background:var(--navy); border-color:var(--navy);"><div style="flex:1; display:flex; flex-direction:column; gap:6px;"><p class="eyebrow" style="font-size:20px;color:var(--yellow);">3 · Chez nous</p><h3 style="font-size:34px;color:var(--cream);">Sail Trail</h3><p class="txt" style="font-size:22px;color:var(--mist);">Logo et mise en carton : 6 min.</p></div></div>
+<div class="card fragment" data-fragment-index="3" style="padding:22px 26px; gap:6px; flex-direction:row; align-items:center; "><div style="flex:1; display:flex; flex-direction:column; gap:6px;"><p class="eyebrow" style="font-size:20px;">4 · Vente</p><h3 style="font-size:34px;">Clients</h3><p class="txt" style="font-size:22px;">Site eCommerce ou devis.</p></div><img src="assets/site_nomade.png" alt="Page produit Le Nomade sur notre site : 186 € TTC, 18 coloris, composition détaillée" style="width:216px; height:142px; flex:none; object-fit:cover; border-radius:10px; border:2px solid var(--line);"></div>
+</div>
+</div>
+<div class="spacer"></div>
+<p class="band fragment" data-fragment-index="4" style="padding:18px 32px; margin-top:24px;">Les matières de couture <b>n’entrent jamais dans notre entrepôt</b> : un seul trajet, du fournisseur à l’atelier.</p>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Youenn (2 min, 2:30–4:30). Étape 1, les achats : sept fournisseurs, tous en France. Le camembert montre ce qu’on leur achète pour un sac et une casquette, 43 € au total. Les Tissages de la Côte d’Albâtre fournissent la toile de lin et les sangles, 11 €. Hardware Durable les boucles, la visière et le bouton, 11 €. Deux fournisseurs récupèrent des voiles sur d’anciens bateaux : Atlantic Sail Recovery pour la casquette, BreizhVoile pour le sac. Éco-Feutre du Midi fournit le rembourrage, EcoZip France la fermeture éclair, et Cartonnages Verts la boîte. Toutes ces commandes partent en même temps : pour un seul Nomade, Odoo envoie cinq demandes de prix d’un coup. Clic, étape 2 : tout est livré directement chez notre sous-traitant, Atelier Couture Voile, qui coud le produit brut. Clic, étape 3 : le brut arrive chez nous ; on imprime le logo et on met en carton, 6 minutes. Clic, étape 4 : on vend sur notre site eCommerce ou sur devis, puis livraison, facture, paiement. Dernier clic : le point clé, les matières de couture ne passent jamais par chez nous ; seules les boîtes arrivent chez nous pour la mise en carton. Transition vers Malouan.</aside>
+</section>
+<section data-n="5" id="bom" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">Méthode de gestion · production</p>
+<h2>Du brut au produit fini, piloté par Odoo</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Malouan</p>
+</div>
+<div style="display:flex; align-items:stretch;">
+<div class="card rise" style="--i:1; width:370px; flex:none; gap:12px; padding:26px 28px; "><div style="display:flex; justify-content:space-between; align-items:center;"><p class="num" style="width:64px; height:64px; font-size:36px; border-radius:32px;">1</p><p class="pill light" style="font-size:20px;">Inventaire</p></div><h3 style="font-size:34px; ">Réception du brut</h3><p class="txt" style="font-size:22px; ">Le sac brut cousu par l’atelier&#160;: 27&#160;€ de matières + 28&#160;€ de couture.</p><div class="spacer"></div><p style="font-family:'Outfit', Arial, sans-serif; font-weight:800; font-size:44px; line-height:1; color:var(--navy);">55 €</p></div>
+<div style="width:56px; flex:none; display:flex; align-items:center; justify-content:center;"><x-shape kind="arrow-right" style="width:44px; height:28px; background:var(--yellow);"></x-shape></div>
+<div class="card fragment" data-fragment-index="1" style="width:370px; flex:none; gap:12px; padding:26px 28px; "><div style="display:flex; justify-content:space-between; align-items:center;"><p class="num" style="width:64px; height:64px; font-size:36px; border-radius:32px;">2</p><p class="pill light" style="font-size:20px;">Qualité</p></div><h3 style="font-size:34px; ">Contrôle qualité</h3><p class="txt" style="font-size:22px; ">Dimensions et étanchéité&#160;: conforme ou non conforme.</p><div class="spacer"></div><p style="font-family:'Outfit', Arial, sans-serif; font-weight:800; font-size:44px; line-height:1; color:var(--navy);">Pass / Fail</p></div>
+<div style="width:56px; flex:none; display:flex; align-items:center; justify-content:center;"><x-shape kind="arrow-right" style="width:44px; height:28px; background:var(--yellow);"></x-shape></div>
+<div class="card fragment" data-fragment-index="2" style="width:370px; flex:none; gap:12px; padding:26px 28px; "><div style="display:flex; justify-content:space-between; align-items:center;"><p class="num" style="width:64px; height:64px; font-size:36px; border-radius:32px;">3</p><p class="pill light" style="font-size:20px;">Fabrication</p></div><h3 style="font-size:34px; ">Ordre de fabrication</h3><p class="txt" style="font-size:22px; ">Brut + boîte (2,50&#160;€) + logo 2&#160;min + carton 4&#160;min (3&#160;€).</p><div class="spacer"></div><p style="font-family:'Outfit', Arial, sans-serif; font-weight:800; font-size:44px; line-height:1; color:var(--navy);">+ 5,50 €</p></div>
+<div style="width:56px; flex:none; display:flex; align-items:center; justify-content:center;"><x-shape kind="arrow-right" style="width:44px; height:28px; background:var(--yellow);"></x-shape></div>
+<div class="card fragment" data-fragment-index="3" style="width:370px; flex:none; gap:12px; padding:26px 28px; background:var(--navy); border-color:var(--navy);"><div style="display:flex; justify-content:space-between; align-items:center;"><p class="num" style="width:64px; height:64px; font-size:36px; border-radius:32px;">4</p><p class="pill yellow" style="font-size:20px;">Inventaire</p></div><h3 style="font-size:34px; color:var(--cream);">Variante commandée</h3><p class="txt" style="font-size:22px; color:var(--mist);">Prête à livrer, coût de revient calculé seul par Odoo.</p><div class="spacer"></div><p style="font-family:'Outfit', Arial, sans-serif; font-weight:800; font-size:44px; line-height:1; color:var(--yellow);">60,50 €</p></div>
+</div>
+<div class="spacer"></div>
+<div class="band fragment" data-fragment-index="4" style="display:flex; flex-direction:column; gap:10px; padding:22px 32px;">
+<p style="font-size:30px; line-height:1.3; color:var(--cream);"><b>Fabrication à la commande</b> : on ne fabrique une variante que lorsqu’un client la commande.</p>
+<p style="font-size:26px; line-height:1.3; color:var(--mist);">Commande client → <b>ordre de fabrication</b> de la couleur choisie · Brut sous 5 → <b>achat à l’atelier</b> pour remonter à 15</p>
+</div>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Malouan (1 min, 4:30–5:30). Voici comment Odoo fait tourner la production. Étape 1 : on réceptionne le brut cousu par l’atelier ; il nous coûte 55 €, 27 € de matières et 28 € de couture. Clic, étape 2 : le contrôle qualité, avec deux tests, les dimensions et l’étanchéité ; un produit non conforme ne part pas en finition. Clic, étape 3 : l’ordre de fabrication consomme le brut et une boîte, puis on imprime le logo, 2 minutes, et on met en carton, 4 minutes. Clic, étape 4 : on obtient exactement la variante commandée, prête à livrer, et Odoo calcule seul son coût de revient, 60,50 € pour Le Nomade, 28,50 € pour Sailor, grâce aux deux niveaux de nomenclature. Dernier clic : on fabrique à la commande. Avec 18 coloris pour le sac, garder chaque couleur en stock coûterait cher ; on garde seulement du brut, et chaque commande client crée l’ordre de fabrication de la couleur choisie. Quand le stock de brut passe sous 5, il propose l’achat à l’atelier, et c’est ce qu’on voit sur la diapo suivante.</aside>
+</section>
+<section data-n="6" id="mrp" class="sand" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">Méthode de gestion · calcul des besoins</p>
+<h2>Une commande déclenche tous les achats</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Malouan</p>
+</div>
+<div style="display:flex; gap:24px; align-items:stretch;">
+<div class="card rise" style="--i:1; width:440px; gap:16px; border-top:12px solid var(--yellow);">
+<p class="eyebrow">Ce que nous faisons</p>
+<h3>1 achat de brut</h3>
+<p class="txt">Proposé par la règle min/max quand le stock passe sous 5 ; on le confirme.</p>
+</div>
+<div style="width:96px; display:flex; align-items:center; justify-content:center;"><x-shape kind="arrow-right" style="width:80px; height:40px; background:var(--yellow);"></x-shape></div>
+<div style="flex:1; display:flex; flex-direction:column; gap:20px;">
+<div class="card fragment" data-fragment-index="1" style="gap:8px; background:var(--navy); border-color:var(--navy);"><h3 style="font-size:36px; color:var(--cream);">L’ordre de sous-traitance</h3><p class="txt" style="color:var(--mist);">créé automatiquement</p></div>
+<div class="card fragment" data-fragment-index="2" style="gap:8px;"><h3 style="font-size:36px;">5 demandes de prix fournisseurs</h3><p class="txt">créées automatiquement, livraison à l’atelier déjà remplie</p></div>
+</div>
+</div>
+<div class="spacer"></div>
+<p class="band fragment" data-fragment-index="3">C’est le <b>calcul des besoins (MRP)</b> du cours, fait par l’ERP.</p>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Malouan (1 min, 5:30–6:30). Notre point fort : quand le stock de brut passe sous 5, la règle min/max propose l’achat à l’atelier pour remonter à 15 ; on n’a qu’à confirmer. Clic : Odoo crée l’ordre de sous-traitance. Clic : il crée aussi une demande de prix chez chaque fournisseur de matières, livrée à l’atelier. Clic : c’est le calcul des besoins vu en cours. Transition vers Loric.</aside>
+</section>
+<section data-n="7" id="cycle" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">Le cycle d’une commande</p>
+<h2>Une commande traverse sept applications</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Loric</p>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:24px; flex:1;">
+<div class="card fragment" style="gap:16px;"><p class="num">1</p><h3 style="font-size:36px;">Commande</h3><p class="txt">Site ou devis</p><div class="spacer"></div><div style="display:flex; flex-wrap:wrap; gap:8px;"><p class="pill">Ventes</p><p class="pill">eCommerce</p></div></div>
+<div class="card fragment" style="gap:16px;"><p class="num">2</p><h3 style="font-size:36px;">Réception</h3><p class="txt">Brut acheté à l’atelier, contrôlé puis mis en stock</p><div class="spacer"></div><div style="display:flex; flex-wrap:wrap; gap:8px;"><p class="pill">Achats</p><p class="pill">Inventaire</p><p class="pill">Qualité</p></div></div>
+<div class="card fragment" style="gap:16px;"><p class="num">3</p><h3 style="font-size:36px;">Fabrication</h3><p class="txt">Lancée par la commande, pour la variante choisie</p><div class="spacer"></div><div style="display:flex; flex-wrap:wrap; gap:8px;"><p class="pill">Fabrication</p></div></div>
+<div class="card fragment" style="gap:16px;"><p class="num">4</p><h3 style="font-size:36px;">Livraison</h3><p class="txt">Et facture</p><div class="spacer"></div><div style="display:flex; flex-wrap:wrap; gap:8px;"><p class="pill">Inventaire</p><p class="pill">Comptabilité</p></div></div>
+<div class="card fragment" style="gap:16px;"><p class="num">5</p><h3 style="font-size:36px;">Paiement</h3><p class="txt">Rapprochement bancaire automatique</p><div class="spacer"></div><div style="display:flex; flex-wrap:wrap; gap:8px;"><p class="pill">Comptabilité</p></div></div>
+</div>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Loric (1 min, 6:30–7:30). Un clic par étape. La commande arrive par le site ou par devis. Le brut est acheté à l’atelier ; à la réception, l’application Qualité le contrôle, et seul ce qui passe le contrôle entre en stock. Ensuite la commande lance seule l’ordre de fabrication de la variante choisie : logo et mise en carton. Puis on livre et on facture. Enfin on encaisse, et une règle rapproche automatiquement le paiement avec la banque. Achats facturés à la réception, ventes facturées à la commande.</aside>
+</section>
+<section data-n="8" id="couts" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">Nos coûts</p>
+<h2>Où va le prix de vente</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Loric</p>
+</div>
+<div class="bars">
+<div class="bar-row slide-in" style="--i:1;">
+<div class="bar-label"><p class="strong" style="font-size:40px;">Le Nomade · 155 € HT</p><div class="marge"><p class="strong" style="font-size:40px; color:var(--yellow-dk);">marge</p><p class="strong n" style="font-size:40px; color:var(--yellow-dk);">61 %</p></div></div>
+<div class="bar" style="width:1240px;">
+<div class="seg mat" style="width:216px;">27 €</div>
+<div class="seg cou" style="width:224px;">28 €</div>
+<div class="seg box" style="width:20px;"></div>
+<div class="seg fin" style="width:24px;"></div>
+<div class="seg mar" style="width:756px;">94,50 €</div>
+</div>
+</div>
+<div class="bar-row slide-in" style="--i:3;">
+<div class="bar-label"><p class="strong" style="font-size:40px;">Sailor · 41,67 € HT</p><div class="marge"><p class="strong" style="font-size:40px; color:var(--yellow-dk);">marge</p><p class="strong n" style="font-size:40px; color:var(--yellow-dk);">32 %</p></div></div>
+<div class="bar" style="width:333px;">
+<div class="seg mat" style="width:120px;">15 €</div>
+<div class="seg cou" style="width:64px;">8 €</div>
+<div class="seg box" style="width:20px;"></div>
+<div class="seg fin" style="width:24px;"></div>
+<div class="seg mar" style="width:105px;">13,17 €</div>
+</div>
+</div>
+</div>
+<div class="spacer"></div>
+<div class="legend rise" style="--i:5;">
+<div class="item"><div class="dot" style="background:var(--blue);"></div><p class="small">Matières</p></div>
+<div class="item"><div class="dot" style="background:var(--navy-2);"></div><p class="small">Couture (atelier)</p></div>
+<div class="item"><div class="dot" style="background:#A08C55;"></div><p class="small">Boîte : 2,50 €</p></div>
+<div class="item"><div class="dot" style="background:#5C6B78;"></div><p class="small">Finition : 3 €</p></div>
+<div class="item"><div class="dot" style="background:var(--yellow);"></div><p class="small">Marge</p></div>
+</div>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Loric (1 min, 7:30–8:30). Sur un Nomade vendu 155 € HT, les matières coûtent 27 €, la couture 28 €, la boîte 2,50 € et la finition 3 € : il reste 94,50 € de marge, soit 61 %. La casquette Sailor est bien moins rentable : 13,17 € de marge, 32 %. C’est notre produit d’appel. Transition vers Pierre-Ferric.</aside>
+</section>
+<section data-n="9" id="bilan" data-transition="push">
+<div class="head">
+<div class="titles">
+<p class="eyebrow">Bilan</p>
+<h2>Une chaîne complète dans un seul ERP</h2>
+<div class="rule"></div>
+</div>
+<p class="speaker">Pierre-Ferric</p>
+</div>
+<div style="display:flex; gap:48px; align-items:flex-start;">
+<div class="card rise" style="--i:1; flex:1; gap:24px;">
+<h3>Ce qui tourne</h3>
+<div style="display:flex; flex-wrap:wrap; gap:16px;">
+<p class="pill" style="font-size:30px;">Ventes</p><p class="pill" style="font-size:30px;">Achats</p><p class="pill" style="font-size:30px;">Inventaire</p><p class="pill" style="font-size:30px;">Fabrication</p><p class="pill" style="font-size:30px;">Comptabilité</p><p class="pill" style="font-size:30px;">eCommerce</p><p class="pill" style="font-size:30px;">Qualité</p><p class="pill yellow" style="font-size:30px;">Réappro auto</p><p class="pill yellow" style="font-size:30px;">Rapprochement auto</p>
+</div>
+</div>
+<div class="card rise" style="--i:2; flex:1; gap:20px; background:var(--navy); border-color:var(--navy);">
+<h3 style="color:var(--cream);">La suite</h3>
+<p class="txt" style="color:var(--mist); font-size:32px;"><b style="color:var(--yellow);">Pilotage :</b> tableau de bord des stocks et ventes</p>
+<p class="txt" style="color:var(--mist); font-size:32px;"><b style="color:var(--yellow);">Fin de vie :</b> reprendre nos sacs</p>
+</div>
+</div>
+<img class="corner-logo" src="assets/logo_navy.svg" alt="Logo Sail Trail">
+<aside>Pierre-Ferric (1 min 30, 8:30–10:00). Sept applications Odoo font tourner toute la chaîne, avec un contrôle qualité à la réception, de l’achat des matières au paiement du client. Le réapprovisionnement et le rapprochement bancaire sont maintenant automatiques. Pour aller plus loin : un tableau de bord de pilotage, et reprendre nos sacs en fin de vie pour boucler la logistique inverse. Merci, nous sommes prêts pour vos questions.</aside>
+</section>
+<section data-n="10" id="fin" class="dark cover">
+<div class="sun-wrap"><svg class="sun" width="620" height="620" viewBox="0 0 620 620" xmlns="http://www.w3.org/2000/svg"><circle cx="310" cy="310" r="310" fill="#F6C21B"/></svg></div>
+<div class="stripe s1"></div>
+<div class="stripe s2"></div>
+<div class="stripe s3"></div>
+<img class="logo-big" src="assets/logo_navy.svg" alt="Logo Sail Trail : une voile au-dessus des vagues">
+<svg class="waves" width="1920" height="180" viewBox="0 0 1920 180" xmlns="http://www.w3.org/2000/svg">
+<g><path d="M0 70 Q120 30 240 70 T480 70 T720 70 T960 70 T1200 70 T1440 70 T1680 70 T1920 70 T2160 70 T2400 70" fill="none" stroke="#F6C21B" stroke-width="6" stroke-linecap="round"/><animateTransform attributeName="transform" type="translate" from="0 0" to="-480 0" dur="9s" repeatCount="indefinite"/></g>
+<g><path d="M-480 120 Q-360 80 -240 120 T0 120 T240 120 T480 120 T720 120 T960 120 T1200 120 T1440 120 T1680 120 T1920 120" fill="none" stroke="#C9D4E6" stroke-width="4" stroke-linecap="round" opacity="0.45"/><animateTransform attributeName="transform" type="translate" from="0 0" to="480 0" dur="14s" repeatCount="indefinite"/></g>
+</svg>
+<div class="cover-text">
+<p class="eyebrow rise" style="--i:0">Sail Trail · Odoo 2026</p>
+<h1 class="rise big" style="--i:1">Merci&#160;!</h1>
+<p class="lead rise" style="--i:3">Des questions&#160;?</p>
+<div class="spacer"></div>
+<p class="team rise" style="--i:5">Oscar · Youenn · Malouan · Loric · Pierre-Ferric</p>
+</div>
+<aside>Questions : 5 minutes. Chacun répond sur sa partie.</aside>
+</section>
+
+</div>
+<div id="notes"></div>
+<div id="prog"></div>
+<div id="hint">→ / clic : avancer · ← : reculer · F : plein écran · N : notes</div>
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...stage.querySelectorAll(':scope > section')];
+  const notes = document.getElementById('notes');
+  const prog = document.getElementById('prog');
+  let cur = 0, step = 0;
+
+  const frags = s => {
+    const f = [...s.querySelectorAll('.fragment')];
+    return f.map((el, i) => ({ el, k: el.dataset.fragmentIndex !== undefined ? +el.dataset.fragmentIndex : 1000 + i }))
+            .sort((a, b) => a.k - b.k);
+  };
+  // regroupe les fragments qui partagent le même index
+  const groups = s => {
+    const out = [];
+    frags(s).forEach(f => { const g = out.find(x => x.k === f.k); g ? g.els.push(f.el) : out.push({ k: f.k, els: [f.el] }); });
+    return out;
+  };
+
+  function show(i, dir, atEnd) {
+    slides.forEach(s => s.classList.remove('active', 'enter', 'enter-back'));
+    const s = slides[i];
+    const g = groups(s);
+    step = atEnd ? g.length : 0;
+    g.forEach((grp, n) => grp.els.forEach(el => el.classList.toggle('visible', n < step)));
+    void s.offsetWidth;
+    s.classList.add('active');
+    if (dir) s.classList.add(dir > 0 ? 'enter' : 'enter-back');
+    cur = i;
+    notes.textContent = s.querySelector('aside')?.textContent || '';
+    prog.style.width = ((i + 1) / slides.length * 100) + '%';
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+
+  function next() {
+    const g = groups(slides[cur]);
+    if (step < g.length) { g[step].els.forEach(el => el.classList.add('visible')); step++; return; }
+    if (cur < slides.length - 1) show(cur + 1, 1);
+  }
+  function prev() {
+    const g = groups(slides[cur]);
+    if (step > 0) { step--; g[step].els.forEach(el => el.classList.remove('visible')); return; }
+    if (cur > 0) show(cur - 1, -1, true);
+  }
+
+  function fit() {
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = `scale(${k}) translate(-50%, -50%)`;
+  }
+  addEventListener('resize', fit); fit();
+
+  addEventListener('keydown', e => {
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1, 0, true);
+    else if (e.key === 'n' || e.key === 'N') notes.classList.toggle('on');
+    else if (e.key === 'f' || e.key === 'F') {
+      try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (_) {}
+    }
+  });
+  document.addEventListener('click', e => { if (!notes.contains(e.target)) (e.clientX < innerWidth / 4 ? prev : next)(); });
+  let x0 = null;
+  addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', e => {
+    if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) (dx < 0 ? next : prev)();
+  });
+  setTimeout(() => { const h = document.getElementById('hint'); if (h) h.style.opacity = 0; }, 5000);
+
+  const start = Math.max(1, Math.min(slides.length, parseInt(location.hash.slice(1)) || 1)) - 1;
+  show(start);
+})();
+</script>
+</body>
+</html>
